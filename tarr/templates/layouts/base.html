@@ -13,7 +13,8 @@
         <header>
             <nav class="navbar">
                 <img src="{% static 'sed.jfif' %}" class="logo" alt="">
-                <ul>
+                <div class="tog" onclick="tog();"></div>
+                <ul class="navigation">
                     {% if user.is_authenticated %}
                     <li>
                         <a href="/info">Inicio</a>
@@ -39,6 +40,14 @@
             </nav>
         </header>
     </section>
+    <script type="text/javascript">
+        function tog(){
+            var menutog = document.querySelector('.tog');
+            var navigation = document.querySelector('.navigation')
+            menutog.classList.toggle('active');
+            navigation.classList.toggle('active');
+        }
+    </script>
     {% block content %}
     {% endblock %}
 </body>

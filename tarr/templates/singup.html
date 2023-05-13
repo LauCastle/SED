@@ -1,11 +1,50 @@
 {% extends 'layouts/base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% block content %}
+        {%for message in messages%}
+        <div class="alert alert-{{message.tags}} alert-dissimible fade show" role="alert">
+            <strong>Mensaje: </strong> {{message}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="close">
+            <span aria-hidden = "true">&times;</span>
+            </button>   
+        </div>
+        {% endfor %}
 
-{% block content %}
-<h1>Singup</h1>
-{{error}}
-<form action="/singup/" method="POST">
-    {% csrf_token  %}
-    {{form.as_p}}
-    <button>Signup</button>
-</form>
-{% endblock %}
+        <h3>sign up</h3>
+
+        <form action="/signup" method="post">
+        {% csrf_token %}
+            <label for"">nombre de usuario</label>
+            <input type="text" id ="username" name="username" placeholder="crear nombre de usuario" Required> 
+            <br>
+            <label for"">nombre</label>
+            <input type="text" id ="fname" name="fname" placeholder="ingresar nombre" Required> 
+            <br>
+            <label for"">apellido</label>
+            <input type="text" id ="lname" name="lname" placeholder="ingresar apellido" Required> 
+            <br>
+            <label for"">correo</label>
+            <input type="email" id ="email" name="email" placeholder="ingresar email" Required> 
+            <br>
+            <label for"">contraseña</label>
+            <input type="password" id ="pass1" name="pass1" placeholder="ingresar contraseña" Required> 
+            <br>
+            <label for"">confirmar contraseña</label>
+            <input type="password" id ="pass2" name="pass2" placeholder="confirmar contraseña" Required> 
+            <br>
+            
+            <button type="submit">sign Up</button>
+        </form>
+
+        <script src="" async defer></script>
+    {% endblock %}
+</body>
+</html>
