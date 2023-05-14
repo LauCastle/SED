@@ -1,41 +1,55 @@
-{% extends 'layouts/base.html' %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+        <link rel="stylesheet" href="{% static 'styles/log.css' %}">
+        <title>SED-Inicio Sesión</title>
     </head>
-
     <body>
         {% block content %}
             {%for message in messages%}
-            <div class="alert alert-{{message.tags}} alert-dissimible fade show" role="alert">
-                <strong>Mensaje: </strong> {{message}}
-                <button type="button" class="close" data-dismiss="alert" aria-label="close">
-                <span aria-hidden = "true">&times;</span>
-                </button>   
-            </div>
+                <div class="alert alert-{{message.tags}} alert-dissimible fade show" role="alert">
+                    <strong>Mensaje: </strong> {{message}}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                    <span aria-hidden = "true">&times;</span>
+                    </button>   
+                </div>
             {% endfor %}
-
-            <h3>sign in</h3>
-
-            <form action="/signin" method="post">
-            {% csrf_token %}
-                <label for"">nombre de usuario</label>
-                <input type="text" id ="username" name="username" placeholder="crear nombre de usuario" Required> 
-                <br>
-                <label for"">contraseña</label>
-                <input type="password" id ="pass1" name="pass1" placeholder="ingresar contraseña" Required> 
-                <br>
-                
-                <button type="submit">sign In</button>
-            </form>
-
-            <script src="" async defer></script>
+        <div class="container">
+            <div class="box">
+                <div class="header">
+                    <header><a href="/"><img src="{% static '../static/sed.jfif' %}" alt="logo"></a>
+                    </header>
+                    <p>Inicia Sesión</p>
+                </div>
+                <form action="signin" method="post">
+                    {% csrf_token %}
+                    <div class="input-box">
+                        <label for="username">Usuario</label>
+                        <input type="text" id ="username" name="username" required> 
+                        <i class="bx bxs-user"></i>
+                    </div>
+                    <div class="input-box">
+                        <label for="password">Contraseña</label>
+                        <input type="password" id ="pass1" name="pass1" required>
+                        <i class="bx bx-lock"></i> 
+                    </div>
+                    <div class="input-box">
+                        <input type="submit" class="input-submit" value="Iniciar Sesión"><a href="info/"></a> 
+                    </div>
+                    <div class="bottom">
+                        <span><a href="/singup">Registrate</a></span>
+                        <span><a href="/">¿Olvidaste tu contraseña?</a></span>
+                    </div>
+                </form>
+            </div>
+            <div class="wrap"></div>
+        </div>
+        <script src="" async defer></script>
         {% endblock %}
     </body>
-
 </html>

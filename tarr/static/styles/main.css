@@ -6,7 +6,7 @@
     box-sizing: border-box;
     font-family: 'Konkhmer Sleokcher', sans-serif;
 }
-
+/*DISEÑO DEL HOME*/
 section {
     position: relative;
     width: 100%;
@@ -118,7 +118,8 @@ header ul li a {
     background: #F1C712;
     clip-path: circle(600px at right 600px);
 }
-
+/*FIN DEL DISEÑO DEL HOME*/
+/*HOME RESPONSIVE*/
 @media (max-width: 991px) {
     header {
         padding: 20px;
@@ -181,6 +182,4 @@ header ul li a {
     .cir {
         clip-path: circle(340px at center bottom);
     }
-
-
 }
