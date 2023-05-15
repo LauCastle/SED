@@ -11,13 +11,14 @@ from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes, force_str
 from . tokens import generate_token
 from django.core.mail.message import EmailMessage
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
 def home(request):
     return render(request, 'home.html')
 
-def singup(request):
+def signin(request):
     if request.method =="POST":
        # username = request.POST.get('username')
         username = request.POST['username']
@@ -80,19 +81,21 @@ def singup(request):
         email.fail_silently = True
         email.send()
         
-        return redirect('signin')
+        return redirect('login')
         
-    return render(request, 'singup.html')
+    return render(request, 'signin.html')
 
+#@login_required
 def info(request):
-    return render(request, 'info.html')
+    return render(request, 'info')
 
+@login_required
 def signout(request):
     logout(request)
     messages.success(request, "saliste exitosamente")
     return redirect('home')
 
-def signin(request):
+def login(request):
     if request.method == 'POST':
         username = request.POST['username']
         pass1 = request.POST['pass1']
@@ -102,15 +105,16 @@ def signin(request):
         if user is not None:
             login(request, user)
             fname = user.first_name
-            return render(request, 'index.html',{'fname': fname})
+            return render(request, 'info',{'fname': fname})
         else:
             messages.error(request, "Error")
             return redirect('home')
         
-    return render(request, 'signin.html')
+    return render(request, 'login.html')
      
+#@login_required
 def cam(request):
-    return render(request, 'cam.html')
+    return render(request, 'cam')
 
 def activate(request,uidb64, token):
     try:

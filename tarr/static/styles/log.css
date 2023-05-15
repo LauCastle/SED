@@ -32,7 +32,7 @@ body{
 
 .box1{
     width: 450px;
-    height: 680px;
+    height: 760px;
     background: rgb(255, 255, 255);
     backdrop-filter: blur(20px);
     border-radius: 30px;
@@ -45,6 +45,16 @@ body{
     position: absolute;
     width: 455px;
     height: 485px;
+    border-radius: 30px;
+    background: rgba(241, 199, 18, 1);
+    box-shadow: 2px 2px 15px 2px rgba(0, 0, 0, 0.115), -2px -0px 15px 2px rgba(255, 255, 255, 0.054);
+    transform: rotate(5deg);
+}
+
+.wrap1{
+    position: absolute;
+    width: 455px;
+    height: 765px;
     border-radius: 30px;
     background: rgba(241, 199, 18, 1);
     box-shadow: 2px 2px 15px 2px rgba(0, 0, 0, 0.115), -2px -0px 15px 2px rgba(255, 255, 255, 0.054);
