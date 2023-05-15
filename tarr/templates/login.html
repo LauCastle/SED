@@ -13,7 +13,6 @@
         {% block content %}
             {%for message in messages%}
                 <div class="alert alert-{{message.tags}} alert-dissimible fade show" role="alert">
-                    <strong>Mensaje: </strong> {{message}}
                     <button type="button" class="close" data-dismiss="alert" aria-label="close">
                     <span aria-hidden = "true">&times;</span>
                     </button>   
@@ -26,7 +25,7 @@
                     </header>
                     <p>Inicia Sesión</p>
                 </div>
-                <form action="signin" method="post">
+                <form action="" method="post">
                     {% csrf_token %}
                     <div class="input-box">
                         <label for="username">Usuario</label>

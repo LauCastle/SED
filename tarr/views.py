@@ -1,5 +1,4 @@
 from django.shortcuts import redirect, render
-from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -30,11 +29,11 @@ def signin(request):
         
         if User.objects.filter(username = username):
             messages.error(request, "nombre de usuario existente ")
-            return redirect ('home')
+            return redirect ('signin/')
             
         if User.objects.filter(email=email):
             messages.error(request, "email registrado")
-            return redirect ('home')
+            return redirect ('signin/')
         
         if len(username)>10:
             messages.error(request, "max 10 caracteres")
@@ -44,7 +43,7 @@ def signin(request):
             
         if not username.isalnum():
             messages.error(request, "usa letras y numeros")
-            return redirect('home')
+            return redirect('signin/')
         
         myuser = User.objects.create_user(username, email, pass1)
         myuser.first_name = fname
@@ -81,13 +80,13 @@ def signin(request):
         email.fail_silently = True
         email.send()
         
-        return redirect('login')
+        return redirect('login.html')
         
     return render(request, 'signin.html')
 
 #@login_required
 def info(request):
-    return render(request, 'info')
+    return render(request, 'info.html')
 
 @login_required
 def signout(request):
@@ -108,13 +107,13 @@ def login(request):
             return render(request, 'info',{'fname': fname})
         else:
             messages.error(request, "Error")
-            return redirect('home')
+            return redirect('info')
         
     return render(request, 'login.html')
      
-#@login_required
+@login_required
 def cam(request):
-    return render(request, 'cam')
+    return render(request, 'cam.html')
 
 def activate(request,uidb64, token):
     try:
