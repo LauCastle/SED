@@ -1,4 +1,5 @@
 from django.shortcuts import redirect, render
+from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -29,11 +30,11 @@ def signin(request):
         
         if User.objects.filter(username = username):
             messages.error(request, "nombre de usuario existente ")
-            return redirect ('signin/')
+            return redirect ('signin')
             
         if User.objects.filter(email=email):
             messages.error(request, "email registrado")
-            return redirect ('signin/')
+            return redirect ('signin')
         
         if len(username)>10:
             messages.error(request, "max 10 caracteres")
@@ -43,7 +44,7 @@ def signin(request):
             
         if not username.isalnum():
             messages.error(request, "usa letras y numeros")
-            return redirect('signin/')
+            return redirect('signin')
         
         myuser = User.objects.create_user(username, email, pass1)
         myuser.first_name = fname
@@ -80,7 +81,7 @@ def signin(request):
         email.fail_silently = True
         email.send()
         
-        return redirect('login.html')
+        return redirect('login')
         
     return render(request, 'signin.html')
 
@@ -111,7 +112,7 @@ def login(request):
         
     return render(request, 'login.html')
      
-@login_required
+#@login_required
 def cam(request):
     return render(request, 'cam.html')
 
