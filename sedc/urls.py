@@ -10,5 +10,6 @@ urlpatterns = [
     path('logout/', views.signout, name="logout"),
     path('login/', views.login, name='login'),
     path('cam/', views.cam, name='cam'),
+    path('camera/', views.livefe, name="live_camera"),
     path('activate/<uidb64>/<token>', views.activate, name="activate")
 ]
