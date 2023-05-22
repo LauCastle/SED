@@ -13,6 +13,11 @@ from . tokens import generate_token
 from django.core.mail.message import EmailMessage
 from django.contrib.auth.decorators import login_required
 
+
+from .camara import *
+from django.http import StreamingHttpResponse
+from django.views.decorators import gzip
+
 # Create your views here.
 
 def home(request):
@@ -130,3 +135,14 @@ def activate(request,uidb64, token):
         return redirect('home')
     else:
         return render(request, 'actvation_failed.html')
+@gzip.gzip_page
+def livefe(request):
+    try:
+         cam = VideoCamera()
+         return StreamingHttpResponse(gen(cam), content_type="multipart/x-mixed-replace;boundary=frame")
+    except:  # This is bad!
+        pass
+
+
+def index(request, *args, **kwargs):
+    return render(request, 'cam.html')
