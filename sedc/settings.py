@@ -22,6 +22,9 @@ EMAIL_HOST_USER = EMAIL_HOST_USER
 EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD
 EMAIL_PORT = EMAIL_PORT
 
+
+#holaaaaa
+
 #APPEND_SLASH=False
 
 # Quick-start development settings - unsuitable for production
