@@ -1,0 +1,55 @@
+{% extends 'layout/app.html' %}
+
+{% load static %}
+{% block body %}
+<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+<script src="{% static 'jquery/jquery.min.js' %}"></script>
+<script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+<style>
+    .video-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: calc(100vh - 100px);
+
+    }
+
+    #video-stream {
+        max-width: 100%;
+        max-height: 100%;
+        margin-top: -12%;
+    }
+</style>
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Cámara</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">Cámara</li>
+    </ol>
+</div>
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        Cámara en Directo
+    </div>
+    <div class="card-body">
+        <div class="video-container">
+            <video id="video-stream" autoplay></video>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+    // Acceder a la cámara y mostrar la transmisión en el elemento de video
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function (stream) {
+            var videoElement = document.getElementById('video-stream');
+            videoElement.srcObject = stream;
+        })
+        .catch(function (error) {
+            console.error('Error al acceder a la cámara:', error);
+        });
+</script>
+{% endblock %}

@@ -1,14 +1,28 @@
-from django.urls import path
 from django.contrib import admin
-from tarr import views
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
+from tarr import views as auth_views
+from django.views.generic.base import TemplateView
+from django.shortcuts import render
+
+def handler404(request, exception):
+    if request.user.is_authenticated:
+        print('True')
+        return render(request, '404.html')
+    else:
+        print('Fail')
+        return render(request, '1404.html')
 
 urlpatterns = [
+    path('',include('')),
     path('admin/', admin.site.urls),
-    path('', views.home, name='home'),
-    path('signin/', views.signin, name='signin'),
-    path('info/', views.info, name='info'),
-    path('logout/', views.signout, name="logout"),
-    path('login/', views.login, name='login'),
-    path('cam/', views.cam, name='cam'),
-    path('activate/<uidb64>/<token>', views.activate, name="activate")
-]
+    path('',TemplateView.as_views(Template_name='home.html'), name='home'),
+    path('login/',auth_views.LoginView.as_view(template_name='login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_vies(template_name='logged_out.html'), name='logout'),
+    path('password/reset/', auth_views.LoginView.as_view(template_name='login.html'), name='logout'),
+    path('info/', auth_views.info, name='info'),
+    path('cam/', auth_views.cam, name='cam'),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static (settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+handler404 = handler404

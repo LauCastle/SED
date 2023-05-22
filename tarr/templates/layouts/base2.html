@@ -1,41 +1,45 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <title>SED</title>
-    <link rel="stylesheet" href="{% static 'styles/info.css' %}">
-</head>
-<body>
-    <div class="container">
-        <aside>
-            <div class="top">
-                <div class="logo">
-                    <img src="{% static 'sed.jfif' %}" alt="">
-                    <h2>Safety<span> Equipment</span> Detector</h2>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <title>SED</title>
+        <link rel="stylesheet" href="{% static 'styles/info.css' %}">
+    </head>
+    <body>
+        <div class="container">
+            <aside>
+                <div class="top">
+                    <div class="logo">
+                        <img src="{% static 'sed.jfif' %}" alt="">
+                        <h2>Safety<span> Equipment</span> Detector</h2>
+                    </div>
+                    <div class="close" id="close-btn">
+                        <span class="material-icons"> cancel </span>
+                    </div>
                 </div>
-                <div class="close" id="close-btn">
-                    <span class="material-icons"> cancel </span>
+                <div class="side">
+                    <a href="#">
+                        <span class="material-icons"> dashboard</span>
+                        <h3>Inicio</h3>
+                    </a>
+                    <a href="cam/">
+                        <span class="material-icons">videocam</span>
+                        <h3>Cámara en vivo</h3>
+                    </a>
+                    <a href="/">
+                        <span class="material-icons">logout</span>
+                        <h3>Cerrar Sesión</h3>
+                    </a>
                 </div>
-            </div>
-            <div class="side">
-                <a href="#">
-                    <span class="material-icons"> dashboard</span>
-                    <h3>Inicio</h3>
-                </a>
-                <a href="cam/">
-                    <span class="material-icons">videocam</span>
-                    <h3>Cámara en vivo</h3>
-                </a>
-                <a href="/">
-                    <span class="material-icons">logout</span>
-                    <h3>Cerrar Sesión</h3>
-                </a>
-            </div>
-        </aside>
-    </div>
-</body>
+            </aside>
+        {% block content %}
+        {% endblock %}
+        </div>
+    </main>
+
+    </body>
 </html>

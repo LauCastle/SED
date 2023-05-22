@@ -126,3 +126,10 @@ aside .side a{
     transition: all 300ms ease;
 }
 
+/* TABLA PRINCIPAL */
+main{
+    margin-top: 1.4rem;
+}
+main .recent{
+    margin-top: 0.8rem;
+}

@@ -1,91 +1,115 @@
-from django.shortcuts import redirect, render
-from django.http import HttpResponse
-from django.contrib.auth.models import User
+from django.shortcuts import render, redirect 
+from .models import Member
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
-from sedc import settings
-from django.core.mail import send_mail
-from django.contrib.sites.shortcuts import get_current_site
-from django.template.loader import render_to_string
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_bytes, force_str
-from . tokens import generate_token
-from django.core.mail.message import EmailMessage
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_protect
+from django.http import HttpResponseRedirect
+from tarr.forms import *
+from django.contrib.auth.models import User
 
-# Create your views here.
 
+from sedc import settings
+
+
+
+
+# Create your vi3ews here.
+#Inicio de la página
 def home(request):
     return render(request, 'home.html')
 
-def signin(request):
-    if request.method =="POST":
-       # username = request.POST.get('username')
-        username = request.POST['username']
-        fname = request.POST['fname']
-        lname = request.POST['lname']
-        email = request.POST['email']
-        pass1 = request.POST['pass1']
-        pass2 = request.POST['pass2']
-        
-        if User.objects.filter(username = username):
-            messages.error(request, "nombre de usuario existente ")
-            return redirect ('signin')
-            
-        if User.objects.filter(email=email):
-            messages.error(request, "email registrado")
-            return redirect ('signin')
-        
-        if len(username)>10:
-            messages.error(request, "max 10 caracteres")
-            
-        if pass1 != pass2:
-            messages.error(request, "contraseña incorrecta")
-            
-        if not username.isalnum():
-            messages.error(request, "usa letras y numeros")
-            return redirect('signin')
-        
-        myuser = User.objects.create_user(username, email, pass1)
-        myuser.first_name = fname
-        myuser.last_name = lname
-        myuser.is_active = False
-        myuser.save()
-        
-        messages.success(request, "tu cuenta fue creada correctamente")
-        
-        #email
-        subject = "bienvenido aqui"
-        message = "hola"+ myuser.first_name + "!!\n" + "gracias por visitar,confirma tu correo en gmail para activar tu cuenta"
-        from_email = settings.EMAIL_HOST_USER
-        to_list = {myuser.email}
-        send_mail(subject, message, from_email, to_list,fail_silently= True)
-        
-        #email confimacion
-        
-        current_site = get_current_site(request)
-        email_subject = "confirma tu gmail"
-        message2 = render_to_string('email_confitmation.html',{
-            'name': myuser.first_name,
-            'domain': current_site.domain,
-            'uid': urlsafe_base64_encode(force_bytes(myuser.pk)),
-            'token': generate_token.make_token(myuser)
-        })
-        
-        email = EmailMessage(
-            email_subject,
-            message2,
-            settings.EMAIL_HOST_USER,
-            [myuser.email],
-        )
-        email.fail_silently = True
-        email.send()
-        
-        return redirect('login')
-        
-    return render(request, 'signin.html')
+#registro
+@csrf_protect
+def register(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            users = User.onjects.create_user(
+                username=form.cleaned_data['username'],
+                password=form.cleaned_data['password1'],
+                email=form.cleaned_data['email'],
+                first_name=form.cleaned_data['first_name'],
+                las_name=form.cleaned_data['last_name']
+            )
+            users.is_staff = True
+            users.is_active = True
+            users.is_superuser = True
+            users.save()
+            messages.success(request, 'Creado satisfactoriamente!')
+            return HttpResponseRedirect('/register/success/')
+    else:
+        form = RegistrationForm()
+    return render(request, 'register.html',{'form':form})
 
-#@login_required
+def register_success(request):
+    return redirect('/login/')
+
+#pagina cuando se registra
+@login_required
+def index(request):
+    return render(request, 'index.html')
+
+@login_required
+def list(request):
+    members_list = Member.objects.all()
+    paginator = Paginator(members_list, 5)
+    page = request.GET.get('page')
+    try:
+        members = paginator.page(page)
+    except PageNotAnInteger:
+        members = paginator.page(1)
+    except EmptyPage:
+        members = paginator.page(paginator.num_pages)
+    return render(request, 'list.html', {'members': members})
+
+#usuarios
+@login_required
+def users(request):
+    users_list = User.objects.all()
+    paginator = Paginator(users_list, 5)
+    page = request.GET.get('page')
+    try:
+        users = paginator.page(page)
+    except PageNotAnInteger:
+        users = paginator.page(1)
+    except EmptyPage:
+        users = paginator.page(paginator.num_pages)
+    return render(request, 'users.html', {'users': users})
+
+@login_required
+def user_delete(request, id):
+    user = User.objects.get(id=id)
+    user.delete()
+    messages.warning(request, 'Usiario eliminado !')
+    return redirect('/users')
+
+@login_required
+def changePassword(request):
+    print('changepasword')
+    return render(request, 'change_password.html')
+
+@login_required
+def update(request, id):
+    member = Member.objects.get(id=id)
+    member.firstname = request.POST['firstname']
+    member.lastname = request.POST['lastname']
+    member.mobile_number = request.POST['mobile_number']
+    member.description = request.POST['description']
+    member.location = request.POST['location']
+    member.date = request.POST['date']
+    member.save()
+    messages.success(request, 'Actualizado satisfactoriamente!')
+    return redirect('/list')
+
+@login_required
+def delete(request, id):
+    member = Member.objects.get(id=id)
+    member.delete()
+    messages.warning(request, 'Member was deleted successfully!')
+    return redirect('/list')
+
+#Eliminar
+@login_required
 def info(request):
     return render(request, 'info.html')
 
@@ -112,21 +136,6 @@ def login(request):
         
     return render(request, 'login.html')
      
-#@login_required
+@login_required
 def cam(request):
     return render(request, 'cam.html')
-
-def activate(request,uidb64, token):
-    try:
-        uid= force_str(urlsafe_base64_encode(uidb64))
-        myuser= User.objects.get(pk=uid)
-    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-        myuser = None
-        
-    if myuser is not None and generate_token.check_token(myuser, token):
-        myuser.is_active= True
-        myuser.save()
-        login(request, myuser)
-        return redirect('home')
-    else:
-        return render(request, 'actvation_failed.html')
